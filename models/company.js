@@ -44,7 +44,7 @@ class Company {
     return company;
   }
 
-  /** Find all companies.
+  /** Find all companies or companies that meet the specified criteria.
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
