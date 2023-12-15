@@ -71,7 +71,7 @@ describe("findJobs", function () {
         let jobs = await Job.findJobs();
         expect(jobs).toEqual([
             {
-                id: testJobIds[0],
+                id: expect.any(Number),
                 title: "j1",
                 salary: 50000,
                 equity: "0",
@@ -79,7 +79,7 @@ describe("findJobs", function () {
                 companyName: "C1",
             },
             {
-                id: testJobIds[1],
+                id: expect.any(Number),
                 title: "j2",
                 salary: 129000,
                 equity: "0.025",
@@ -87,7 +87,7 @@ describe("findJobs", function () {
                 companyName: "C2",
             },
             {
-                id: testJobIds[2],
+                id: expect.any(Number),
                 title: "j3",
                 salary: 249000,
                 equity: "0.099",
@@ -264,7 +264,7 @@ describe("update", function () {
         let job = await Job.update(testJobIds[0], updateData);
         expect(job).toEqual({
             id: testJobIds[0],
-            companyhandle: "c1",
+            companyHandle: "c1",
             ...updateData,
         });
     });

@@ -5,14 +5,16 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, ExpressError } = require("../expressError");
 const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth");
-const Company = require("../models/company");
+const Job = require("../models/job");
 
 const jobNewSchema = require("../schemas/jobNew.json");
 const jobUpdateSchema = require("../schemas/jobUpdate.json");
 
 const router = new express.Router();
+
+
 
 /** POST / { job } =>  { job }
  *
@@ -26,6 +28,10 @@ const router = new express.Router();
 router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, jobNewSchema);
+        console.log('line 31', req.body)
+        console.log('line 32', jobNewSchema)
+        console.log('line 33', validator)
+        console.log('line 34', validator.valid)
         if (!validator.valid) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
@@ -39,7 +45,7 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
 });
 
 /** GET /  =>
- *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
+ *   { jobs: [ { id, title, salary, equity, company_handle }, ...] }
  *
  * Can filter on provided search filters:
  * - minEmployees
@@ -50,15 +56,21 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-    try {
-        const { name = '', minEmployees = 0, maxEmployees = 2147483647 } = req.query;
+    const q = req.query;
 
-        if (parseInt(minEmployees) > parseInt(maxEmployees)) {
-            throw new BadRequestError('minEmployees cannot be greater than maxEmployees');
+    if (q.minSalary !== undefined) q.minSalary = +q.minSalary;
+    q.hasEquity = q.hasEquity === 'true';
+
+    try {
+        const validator = jsonschema.validate(q, jobNewSchema);
+
+        if (!validator.valid) {
+            const errs = validator.errors.map(e => e.stack)
+            throw new ExpressError(errs);
         }
 
-        const companies = await Company.findAll({ name, minEmployees, maxEmployees });
-        return res.json({ companies });
+        const jobs = await Job.findJobs(q);
+        return res.json({ jobs });
     } catch (err) {
         return next(err);
     }
@@ -74,7 +86,7 @@ router.get("/", async function (req, res, next) {
 
 router.get("/:id", async function (req, res, next) {
     try {
-        const job = await Job.get(req.params.handle);
+        const job = await Job.get(req.params.id);
         return res.json({ job });
     } catch (err) {
         return next(err);
@@ -115,7 +127,7 @@ router.patch("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next
 router.delete("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         await Job.remove(req.params.id);
-        return res.json({ deleted: req.params.handle });
+        return res.json({ deleted: req.params.id });
     } catch (err) {
         return next(err);
     }

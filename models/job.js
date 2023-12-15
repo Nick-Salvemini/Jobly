@@ -6,6 +6,8 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
+
+
 class Job {
     /** Create a job (from data), update db, return new job data.
      *
@@ -20,7 +22,7 @@ class Job {
             `INSERT INTO jobs
            (title, salary, equity, company_handle)
            VALUES ($1, $2, $3, $4)
-           RETURNING id, title, salary, equity, company_handle`,
+           RETURNING id, title, salary, equity, company_handle AS companyHandle`,
             [
                 data.title,
                 data.salary,
@@ -29,7 +31,7 @@ class Job {
             ],
         );
         const job = result.rows[0];
-
+        console.log('line 34, job model', job)
         return job;
     }
 
@@ -149,17 +151,17 @@ class Job {
 
         if (!job) throw new NotFoundError(`No job: ${id}`);
 
-        const companiesRes = await db.query(
-            `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           WHERE handle = $1`, [job.companyHandle]);
+        // const companiesRes = await db.query(
+        //     `SELECT handle,
+        //           name,
+        //           description,
+        //           num_employees AS "numEmployees",
+        //           logo_url AS "logoUrl"
+        //    FROM companies
+        //    WHERE handle = $1`, [job.companyHandle]);
 
-        delete job.companyHandle;
-        job.company = companiesRes.rows[0];
+        // delete job.companyHandle;
+        // job.company = companiesRes.rows[0];
 
         return job;
     }

@@ -27,7 +27,7 @@ describe("POST /jobs", function () {
         title: "j4",
         salary: 100000,
         equity: ".05",
-        company_handle: "c2"
+        companyHandle: "c2"
     };
 
     test("ok for admins", async function () {
@@ -185,16 +185,6 @@ describe("PATCH /jobs/:id", function () {
             .set("authorization", `Bearer ${adminToken}`);
         expect(resp.statusCode).toEqual(404);
     });
-
-    //   test("bad request on handle change attempt", async function () {
-    //     const resp = await request(app)
-    //       .patch(`/jobs/${testJobIds[0]}`)
-    //       .send({
-    //         handle: "c1-new",
-    //       })
-    //       .set("authorization", `Bearer ${adminToken}`);
-    //     expect(resp.statusCode).toEqual(400);
-    //   });
 
     test("bad request on invalid data", async function () {
         const resp = await request(app)
