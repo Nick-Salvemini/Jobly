@@ -264,7 +264,7 @@ describe("update", function () {
         let job = await Job.update(testJobIds[0], updateData);
         expect(job).toEqual({
             id: testJobIds[0],
-            companyHandle: "c1",
+            companyhandle: "c1",
             ...updateData,
         });
     });
