@@ -80,21 +80,6 @@ class Job {
    **/
 
     static async get(id) {
-        // const jobRes = await db.query(
-        //     `SELECT id,
-        //           title,
-        //           salary,
-        //           equity,
-        //           company_handle AS "companyHandle"
-        //    FROM jobs
-        //    WHERE id = $1`, [id]);
-
-        // const job = jobRes.rows[0];
-
-        // if (!job) throw new NotFoundError(`No job: ${id}`);
-
-        // return job;
-
         const jobRes = await db.query(
             `SELECT j.id,
                 j.title,
@@ -129,24 +114,6 @@ class Job {
         }
 
         return job
-
-        // const { id, title, salary, equity, companyHandle, companyName, companyDescription, companyNumEmployees, companyLogoUrl } = job;
-
-        // const result = {
-        //     id,
-        //     title,
-        //     salary,
-        //     equity,
-        //     company: {
-        //         handle: companyHandle,
-        //         name: companyName,
-        //         description: companyDescription,
-        //         numEmployees: companyNumEmployees,
-        //         logoUrl: companyLogoUrl
-        //     }
-        // };
-
-        // return result;
     }
 
     /** Update job data with `data`.

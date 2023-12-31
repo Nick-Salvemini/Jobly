@@ -32,9 +32,7 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-        console.log('line 35', req.body)
         const job = await Job.create(req.body);
-        console.log('line 37', job)
         return res.status(201).json({ job });
     } catch (err) {
         return next(err);
@@ -53,28 +51,8 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-    // const q = req.query;
-
-    // if (q.minSalary !== undefined) q.minSalary = +q.minSalary;
-    // q.hasEquity = q.hasEquity === 'true';
-
-    // try {
-    //     const validator = jsonschema.validate(q, jobNewSchema);
-
-    //     if (!validator.valid) {
-    //         const errs = validator.errors.map(e => e.stack)
-    //         throw new ExpressError(errs);
-    //     }
-
-    //     const jobs = await Job.findJobs(q);
-    //     return res.json({ jobs });
-    // } catch (err) {
-    //     return next(err);
-    // }
-
     try {
         const { title = '', hasEquity = null, minSalary = 0 } = req.query;
-
         const jobs = await Job.findJobs({ title, hasEquity, minSalary });
         return res.json({ jobs });
     } catch (err) {

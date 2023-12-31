@@ -43,6 +43,25 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
   }
 });
 
+/** POST /[username]  =>  [username] applied for job (ID#:[jobId])
+ * Applies the specified user for the specified job.
+ * 
+ * returns that the user applied for the job:
+ * [username] applied for job (ID#:[jobId])
+ * * Authorization required: login
+*/
+
+router.post("/:username/jobs/:id", ensureAdminOrCorrectUser, ensureLoggedIn, async function (req, res, next) {
+  try {
+    const { username, id } = req.params;
+    console.log('Line 57 - Route Params:', username, id);
+    const application = await User.apply(username, id);
+    return res.status(201).json(application)
+  } catch (err) {
+    return next(err)
+  }
+});
+
 
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
@@ -117,6 +136,5 @@ router.delete("/:username", ensureAdminOrCorrectUser, ensureLoggedIn, async func
     return next(err);
   }
 });
-
 
 module.exports = router;
