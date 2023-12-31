@@ -34,38 +34,6 @@ describe("create", function () {
 
 /************************************** findJobs */
 
-// describe("findJobs", function () {
-//     test("works: no filter", async function () {
-//         let companies = await Job.findJobs();
-//         expect(companies).toEqual([
-// {
-//     id: testJobIds[0],
-//     title: "j1",
-//     salary: 50000,
-//     equity: "0",
-//     companyHandle: "c1",
-//     companyName: "C1",
-// },
-// {
-//     id: testJobIds[1],
-//     title: "j2",
-//     salary: 129000,
-//     equity: "0.025",
-//     companyHandle: "c2",
-//     companyName: "C2",
-// },
-// {
-//     id: testJobIds[2],
-//     title: "j3",
-//     salary: 249000,
-//     equity: "0.099",
-//     companyHandle: "c3",
-//     companyName: "C3",
-// },
-//         ]);
-//     });
-// });
-
 describe("findJobs", function () {
     test("works: no filter", async function () {
         let jobs = await Job.findJobs();
@@ -186,72 +154,13 @@ describe("get", function () {
 
 /************************************** update */
 
-// describe("update", function () {
-//     const updateData = {
-//         title: "New",
-//         salary: 109000,
-//         equity: "0"
-//     };
-
-//     test("works", async function () {
-//         let job = await Job.update(testJobIds[0], updateData);
-//         expect(job).toEqual({
-//             id: testJobIds[0],
-//             ...updateData,
-//         });
-//     });
-
-//     test("works: null fields", async function () {
-//         const updateDataSetNulls = {
-//             title: "New Title",
-//             salary: null,
-//             equity: null
-//         };
-
-//         let job = await Job.update(testJobIds[0], updateDataSetNulls);
-//         expect(job).toEqual({
-//             id: testJobIds[0],
-//             ...updateDataSetNulls,
-//         });
-
-//         const result = await db.query(
-//             `SELECT handle, name, description, num_employees, logo_url
-//            FROM companies
-//            WHERE handle = 'c1'`);
-//         expect(result.rows).toEqual([{
-//             id: testJobIds[0],
-//             title: "New Title",
-//             salary: null,
-//             equity: null,
-//             company_handle: "c1"
-//         }]);
-//     });
-
-//     test("not found if no such job", async function () {
-//         try {
-//             await Job.update(99999, updateData);
-//             fail();
-//         } catch (err) {
-//             expect(err instanceof NotFoundError).toBeTruthy();
-//         }
-//     });
-
-//     test("bad request with no data", async function () {
-//         try {
-//             await Job.update(1, {});
-//             fail();
-//         } catch (err) {
-//             expect(err instanceof BadRequestError).toBeTruthy();
-//         }
-//     });
-// });
-
 describe("update", function () {
     let updateData = {
         title: "New",
         salary: 500,
         equity: "0.5",
     };
+
     test("works", async function () {
         let job = await Job.update(testJobIds[0], updateData);
         expect(job).toEqual({
