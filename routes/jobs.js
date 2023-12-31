@@ -28,16 +28,13 @@ const router = new express.Router();
 router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         const validator = jsonschema.validate(req.body, jobNewSchema);
-        console.log('line 31', req.body)
-        console.log('line 32', jobNewSchema)
-        console.log('line 33', validator)
-        console.log('line 34', validator.valid)
         if (!validator.valid) {
             const errs = validator.errors.map(e => e.stack);
             throw new BadRequestError(errs);
         }
-
+        console.log('line 35', req.body)
         const job = await Job.create(req.body);
+        console.log('line 37', job)
         return res.status(201).json({ job });
     } catch (err) {
         return next(err);
@@ -56,20 +53,29 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-    const q = req.query;
+    // const q = req.query;
 
-    if (q.minSalary !== undefined) q.minSalary = +q.minSalary;
-    q.hasEquity = q.hasEquity === 'true';
+    // if (q.minSalary !== undefined) q.minSalary = +q.minSalary;
+    // q.hasEquity = q.hasEquity === 'true';
+
+    // try {
+    //     const validator = jsonschema.validate(q, jobNewSchema);
+
+    //     if (!validator.valid) {
+    //         const errs = validator.errors.map(e => e.stack)
+    //         throw new ExpressError(errs);
+    //     }
+
+    //     const jobs = await Job.findJobs(q);
+    //     return res.json({ jobs });
+    // } catch (err) {
+    //     return next(err);
+    // }
 
     try {
-        const validator = jsonschema.validate(q, jobNewSchema);
+        const { title = '', hasEquity = null, minSalary = 0 } = req.query;
 
-        if (!validator.valid) {
-            const errs = validator.errors.map(e => e.stack)
-            throw new ExpressError(errs);
-        }
-
-        const jobs = await Job.findJobs(q);
+        const jobs = await Job.findJobs({ title, hasEquity, minSalary });
         return res.json({ jobs });
     } catch (err) {
         return next(err);
@@ -112,7 +118,7 @@ router.patch("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next
             throw new BadRequestError(errs);
         }
 
-        const job = await Job.update(req.params.handle, req.body);
+        const job = await Job.update(req.params.id, req.body);
         return res.json({ job });
     } catch (err) {
         return next(err);
@@ -127,7 +133,7 @@ router.patch("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next
 router.delete("/:id", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
     try {
         await Job.remove(req.params.id);
-        return res.json({ deleted: req.params.id });
+        return res.json({ deleted: parseInt(req.params.id) });
     } catch (err) {
         return next(err);
     }

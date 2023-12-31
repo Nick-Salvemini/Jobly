@@ -26,7 +26,7 @@ describe("POST /jobs", function () {
     const newJob = {
         title: "j4",
         salary: 100000,
-        equity: ".05",
+        equity: "0.05",
         companyHandle: "c2"
     };
 
@@ -37,7 +37,10 @@ describe("POST /jobs", function () {
             .set("authorization", `Bearer ${adminToken}`);
         expect(resp.statusCode).toEqual(201);
         expect(resp.body).toEqual({
-            job: newJob,
+            job: {
+                ...newJob,
+                id: expect.any(Number)
+            }
         });
     });
 
@@ -84,19 +87,22 @@ describe("GET /jobs", function () {
                         title: "j1",
                         salary: 50000,
                         equity: "0",
-                        company_handle: "c1"
+                        company_handle: "c1",
+                        id: expect.any(Number)
                     },
                     {
                         title: "j2",
                         salary: 129000,
-                        equity: ".025",
-                        company_handle: "c2"
+                        equity: "0.025",
+                        company_handle: "c2",
+                        id: expect.any(Number)
                     },
                     {
                         title: "j3",
                         salary: 249000,
-                        equity: ".099",
-                        company_handle: "c3"
+                        equity: "0.099",
+                        company_handle: "c3",
+                        id: expect.any(Number)
                     },
                 ],
         });
@@ -125,13 +131,19 @@ describe("GET /jobs/:id", function () {
                 title: "j1",
                 salary: 50000,
                 equity: "0",
-                company_handle: "c1"
+                company: {
+                    handle: "c1",
+                    name: "C1",
+                    numEmployees: 1,
+                    description: "Desc1",
+                    logoUrl: "http://c1.img",
+                }
             },
         });
     });
 
     test("not found for no such job", async function () {
-        const resp = await request(app).get(`/jobs/nope`);
+        const resp = await request(app).get(`/jobs/0`);
         expect(resp.statusCode).toEqual(404);
     });
 });
@@ -152,7 +164,7 @@ describe("PATCH /jobs/:id", function () {
                 title: "J1-new",
                 salary: 50000,
                 equity: "0",
-                company_handle: "c1"
+                companyHandle: "c1"
             },
         });
     });
@@ -178,9 +190,9 @@ describe("PATCH /jobs/:id", function () {
 
     test("not found on no such job", async function () {
         const resp = await request(app)
-            .patch(`/jobs/nope`)
+            .patch(`/jobs/0`)
             .send({
-                name: "new nope",
+                title: "new nope",
             })
             .set("authorization", `Bearer ${adminToken}`);
         expect(resp.statusCode).toEqual(404);
@@ -222,7 +234,7 @@ describe("DELETE /jobs/:id", function () {
 
     test("not found for no such job", async function () {
         const resp = await request(app)
-            .delete(`/jobs/nope`)
+            .delete(`/jobs/0`)
             .set("authorization", `Bearer ${adminToken}`);
         expect(resp.statusCode).toEqual(404);
     });

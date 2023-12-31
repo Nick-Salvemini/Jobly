@@ -23,7 +23,7 @@ describe("create", function () {
         title: "New",
         salary: 99000,
         equity: "0",
-        company_handle: "c1"
+        companyHandle: "c1"
     };
 
     test("works", async function () {
@@ -75,24 +75,21 @@ describe("findJobs", function () {
                 title: "j1",
                 salary: 50000,
                 equity: "0",
-                companyHandle: "c1",
-                companyName: "C1",
+                company_handle: "c1"
             },
             {
                 id: expect.any(Number),
                 title: "j2",
                 salary: 129000,
                 equity: "0.025",
-                companyHandle: "c2",
-                companyName: "C2",
+                company_handle: "c2"
             },
             {
                 id: expect.any(Number),
                 title: "j3",
                 salary: 249000,
                 equity: "0.099",
-                companyHandle: "c3",
-                companyName: "C3",
+                company_handle: "c3"
             },
         ]);
     });
@@ -105,8 +102,7 @@ describe("findJobs", function () {
                 title: "j3",
                 salary: 249000,
                 equity: "0.099",
-                companyHandle: "c3",
-                companyName: "C3",
+                company_handle: "c3"
             },
         ]);
     });
@@ -119,16 +115,14 @@ describe("findJobs", function () {
                 title: "j2",
                 salary: 129000,
                 equity: "0.025",
-                companyHandle: "c2",
-                companyName: "C2",
+                company_handle: "c2"
             },
             {
                 id: testJobIds[2],
                 title: "j3",
                 salary: 249000,
                 equity: "0.099",
-                companyHandle: "c3",
-                companyName: "C3",
+                company_handle: "c3"
             },
         ]);
     });
@@ -141,8 +135,7 @@ describe("findJobs", function () {
                 title: "j3",
                 salary: 249000,
                 equity: "0.099",
-                companyHandle: "c3",
-                companyName: "C3",
+                company_handle: "c3"
             },
         ]);
     });
@@ -155,8 +148,7 @@ describe("findJobs", function () {
                 title: "j1",
                 salary: 50000,
                 equity: "0",
-                companyHandle: "c1",
-                companyName: "C1",
+                company_handle: "c1"
             },
         ]);
     });

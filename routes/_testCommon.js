@@ -46,7 +46,7 @@ async function commonBeforeAll() {
       title: 'j1',
       salary: 50000,
       equity: '0',
-      company_handle: 'c1'
+      companyHandle: 'c1'
     }
   )).id;
   testJobIds[1] = (await Job.create(
@@ -54,7 +54,7 @@ async function commonBeforeAll() {
       title: 'j2',
       salary: 129000,
       equity: '.025',
-      company_handle: 'c2'
+      companyHandle: 'c2'
     }
   )).id;
   testJobIds[2] = (await Job.create(
@@ -62,7 +62,7 @@ async function commonBeforeAll() {
       title: 'j3',
       salary: 249000,
       equity: '.099',
-      company_handle: 'c3'
+      companyHandle: 'c3'
     }
   )).id;
 
